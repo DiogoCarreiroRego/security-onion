@@ -8,10 +8,14 @@
   trap 'exec 2>&4 1>&3' 0 1 2 3
   exec 1>$SCRIPT_LOG_DETAIL 2>&1
 
-  hostnamectl set-hostname kali
   export DEBIAN_FRONTEND=noninteractive
   export DEBCONF_NONINTERACTIVE_SEEN=true
   apt-get -o DPkg::Options::=--force-confdef update
   apt-get -y -o DPkg::Options::=--force-confdef upgrade
+
+  cp /var/lib/cloud/instance/scripts/NetworkMiner.desktop /usr/share/applications/NetworkMiner.desktop
+  chmod 777 /usr/share/applications/NetworkMiner.desktop
+
+  echo kali:Passw0rd | sudo chpasswd
 
 fi
