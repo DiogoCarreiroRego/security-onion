@@ -19,7 +19,7 @@ provider "aws" {
   #secret_key = "xxxx"
   #token = "xxxx"
 
-  profile = "vocareum"
+  profile = "default"
 }
 
 provider "cloudinit" {
@@ -86,14 +86,14 @@ data "template_cloudinit_config" "config-onion" {
   }
 }
 
-data "template_cloudinit_config" "config-analyst" {
+data "template_cloudinit_config" "config-kali" {
   gzip = false
   base64_encode = false
 
   part {
-    filename = var.cloud_config_desktop
+    filename = var.cloud_config_kali
     content_type = "text/x-shellscript"
-    content = file(var.cloud_config_desktop)
+    content = file(var.config-kali)
   }
 
   part {
