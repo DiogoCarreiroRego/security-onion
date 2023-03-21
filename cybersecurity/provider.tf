@@ -30,15 +30,15 @@ data "template_cloudinit_config" "config-desktop" {
   base64_encode = false
 
   part {
-    filename     = "change-password.sh"
+    filename     = var.desktop-change-password
     content_type = "text/x-shellscript"
-    content      = data.template_file.desktop-password
+    content      = data.template_file.desktop-password.rendered
   }
 
   part {
-    filename = var.cloud_config_desktop
+    filename = var.cloud-config-desktop
     content_type = "text/x-shellscript"
-    content = file(var.cloud_config_desktop)
+    content = file(var.cloud-config-desktop)
   }
 
   part {
@@ -48,9 +48,9 @@ data "template_cloudinit_config" "config-desktop" {
   }
 
   part {
-    filename = var.config-NetworkProvider
+    filename = var.config-NetworkMiner
     content_type = "text/x-shellscript"
-    content = file(var.config-NetworkProvider)
+    content = file(var.config-NetworkMiner)
   }
 
   part {
@@ -58,32 +58,11 @@ data "template_cloudinit_config" "config-desktop" {
     content_type = "text/x-shellscript"
     content = file(var.config-onion)
   }
-}
 
-data "template_file" "fstab" {
-  template = file("${path.module}/update-fstab.tpl")
-
-  vars = {
-    onion_ip = aws_network_interface.onion_nic_private1.private_ip,
-    efs_ip = aws_efs_mount_target.onion2-mnt1.ip_address
-  }
-}
-
-data "template_file" "kali-password" {
-  template = file("${path.module}/update-password.tpl")
-
-  vars = {
-    userid = "kali",
-    userid = var.kali_userpw
-  }
-}
-
-data "template_file" "desktop-password" {
-  template = file("${path.module}/update-password.tpl")
-
-  vars = {
-    userid = "ubuntu",
-    userid = var.desktop_userpw
+  part {
+    filename = var.config-45-allow-colord
+    content_type = "text/plain"
+    content = file(var.config-45-allow-colord)
   }
 }
 
@@ -92,15 +71,15 @@ data "template_cloudinit_config" "config-onion" {
   base64_encode = false
 
   part {
-    filename     = "update-fstab.sh"
+    filename     = var.update-fstab
     content_type = "text/x-shellscript"
     content      = data.template_file.fstab.rendered
   }
 
   part {
-    filename = var.cloud_config_onion
+    filename = var.cloud-config-onion
     content_type = "text/x-shellscript"
-    content = file(var.cloud_config_onion)
+    content = file(var.cloud-config-onion)
   }
 
   part {
@@ -116,9 +95,14 @@ data "template_cloudinit_config" "config-onion" {
   }
 
   part {
-    filename = var.config-NetworkProvider
+    filename = var.config-NetworkMiner
     content_type = "text/x-shellscript"
-    content = file(var.config-NetworkProvider)
+    content = file(var.config-NetworkMiner)
+  }
+  part {
+    filename = var.config-45-allow-colord
+    content_type = "text/plain"
+    content = file(var.config-45-allow-colord)
   }
 }
 
@@ -127,32 +111,32 @@ data "template_cloudinit_config" "config-kali" {
   base64_encode = false
 
   part {
-    filename     = "change-password.sh"
+    filename     = var.kali-change-password
     content_type = "text/x-shellscript"
-    content      = data.template_file.kali-password
+    content      = data.template_file.kali-password.rendered
   }
 
   part {
-    filename = var.cloud_config_kali
+    filename = var.cloud-config-kali
+    content_type = "text/x-shellscript"
+    content = file(var.cloud-config-kali)
+  }
+
+  part {
+    filename = var.config-kali
     content_type = "text/x-shellscript"
     content = file(var.config-kali)
   }
 
   part {
-    filename = var.config-desktop
+    filename = var.config-NetworkMiner
     content_type = "text/x-shellscript"
-    content = file(var.config-desktop)
+    content = file(var.config-NetworkMiner)
   }
 
   part {
-    filename = var.config-onion
-    content_type = "text/x-shellscript"
-    content = file(var.config-onion)
-  }
-
-  part {
-    filename = var.config-NetworkProvider
-    content_type = "text/x-shellscript"
-    content = file(var.config-NetworkProvider)
+    filename = var.config-45-allow-colord
+    content_type = "text/plain"
+    content = file(var.config-45-allow-colord)
   }
 }
