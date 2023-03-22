@@ -1,5 +1,5 @@
 resource "aws_vpc_security_group_ingress_rule" "cyber_home" {
-  cidr_ipv4              = "128.65.243.205/32"
+  cidr_ipv4              = "78.29.148.171/32"
   description            = "Home"
   ip_protocol            = "-1"
   security_group_id      = aws_security_group.cyber_default.id
